@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hong Kong | Premier Tourist Destinations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-primary: #1e4d9c; 
+            --color-secondary: #ff9900; 
+            --color-dark: #333333; 
+            --color-light-bg: #f8f9fa;
+            --color-white: #ffffff;
+            --color-gray: #6c757d;
+            --color-success: #28a745; 
+            --color-danger: #dc3545; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            scroll-behavior: smooth;
+            background-image: url('light.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-color: var(--color-light-bg); 
+            color: var(--color-dark);
+        }
+        
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--color-dark); 
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            z-index: 1000;
+        }
+        header a {
+            color: var(--color-white);
+            text-decoration: none;
+            margin: 0 25px; 
+            font-weight: 400; 
+            font-size: 16px;
+            letter-spacing: 0.5px;
+            padding: 8px 12px;
+            transition: color 0.3s, background-color 0.3s;
+            border-radius: 4px;
+        }
+        header a:hover {
+            color: var(--color-secondary); 
+        }
+        header a.active {
+            color: var(--color-dark);
+            background-color: var(--color-white);
+            font-weight: 700;
+        }
+
+        .hero {
+            height: 90vh;
+            background-image: url('hongkong_skyline.jpg'); 
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 70px;
+            animation: fadeIn 2s ease-in-out;
+            position: relative;
+        }
+        .hero::before { 
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3); 
+        }
+        .hero h1 {
+            background: rgba(var(--color-white), 0.95); 
+            padding: 30px 60px; 
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 56px;
+            color: var(--color-primary); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3); 
+            line-height: 1.2;
+            z-index: 10;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        
+        section {
+            padding: 80px 40px; 
+            max-width: 1200px; 
+            margin: 40px auto; 
+            background-color: var(--color-white); 
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        section.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        h2 {
+            color: var(--color-dark);
+            margin-bottom: 30px;
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 3px solid var(--color-secondary);
+            display: inline-block;
+            padding-bottom: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            width: fit-content;
+        }
+
+        .about {
+            text-align: center;
+            display: flex; 
+            align-items: center;
+            gap: 40px;
+        }
+        .about img {
+            width: 350px; 
+            height: 250px; 
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+            animation: fadeIn 1s ease-out 0.5s both;
+            flex-shrink: 0;
+        }
+        .about p {
+            line-height: 1.8;
+            font-size: 17px;
+            text-align: left;
+            padding: 0; 
+            animation: none; 
+            font-weight: 300;
+            color: var(--color-gray);
+        }
+        .about .content-wrapper {
+            text-align: left;
+        }
+        .about h2 {
+            text-align: left;
+            margin-left: 0;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; 
+        }
+
+        .card {
+            background: var(--color-light-bg); 
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out both;
+            animation-delay: calc(var(--delay) * 0.1s); 
+        }
+        .card:hover {
+            transform: translateY(-8px); 
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        .card img {
+            width: 100%;
+            height: 200px; 
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .card h3 {
+            margin: 10px 0;
+            color: var(--color-primary);
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .card p {
+            font-size: 15px;
+            color: var(--color-gray);
+            line-height: 1.6;
+            font-weight: 300;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        form {
+            max-width: 500px; 
+            background: var(--color-white);
+            padding: 40px; 
+            margin: auto;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        form h3 {
+            font-size: 24px;
+            color: var(--color-dark);
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        form.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--color-dark);
+            font-size: 15px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 5px 0 15px;
+            border: 1px solid #ced4da; 
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 0.2rem rgba(30, 77, 156, 0.25);
+            outline: none;
+        }
+        button {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        button:hover {
+            background-color: #163a78; 
+            transform: translateY(-1px);
+        }
+        .next-btn, .prev-btn, .next-step-btn, .prev-step-btn {
+            width: auto;
+            margin: 10px 0 0;
+        }
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .button-group button {
+            flex-grow: 1;
+        }
+        
+        #loginForm p button {
+            background-color: transparent !important;
+            color: var(--color-primary) !important;
+            text-decoration: underline;
+            padding: 0;
+            margin: 0;
+            font-size: 1em;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        #loginForm p button:hover {
+            color: var(--color-secondary) !important;
+            transform: none;
+        }
+
+        
+        .form-step {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .form-step.active, .form-step.active-step {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .submission-message {
+            text-align: center; 
+            margin-top: 15px; 
+            font-weight: bold; 
+            padding: 10px; 
+            border-radius: 4px;
+            transition: opacity 0.5s;
+        }
+
+        .submission-message.success {
+            color: var(--color-success); 
+            background: #e6ffed; 
+            border: 1px solid var(--color-success);
+        }
+        
+        .submission-message.error {
+            color: var(--color-danger); 
+            background: #ffe6e6; 
+            border: 1px solid var(--color-danger);
+        }
+
+        footer {
+            background: var(--color-dark);
+            color: var(--color-white);
+            padding: 30px 20px; 
+            text-align: center;
+            font-weight: 300;
+        }
+        footer h3 {
+            margin-bottom: 10px;
+            font-weight: 700;
+            font-size: 20px;
+            color:rgb(193, 193, 193);
+        }
+        footer p {
+            margin-top: 15px;
+            font-size: 0.85em;
+            color: #ccc;
+        }
+
+        
+        @media(max-width: 992px) {
+            .about {
+                flex-direction: column;
+            }
+            .about h2 {
+                text-align: center;
+                margin-left: auto;
+            }
+        }
+        @media(max-width: 600px){
+            .hero h1 { font-size: 40px; padding: 20px 30px; }
+            header a { margin: 0 8px; font-size: 14px; padding: 6px 10px; }
+            section { padding: 50px 20px; margin: 20px auto; }
+            .products-grid { grid-template-columns: 1fr; }
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="#login" class="nav-link" id="login-link">Login/Sign Up</a>
+    <a href="#signout" class="nav-link" id="signout-link" style="display: none;">Sign Out</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#Places" class="nav-link">Destinations</a>
+    <a href="#Appointment" class="nav-link">Book Tour</a>
+    <a href="#contact" class="nav-link">Contact Us</a>
+</header>
+
+<div class="hero" style="background-image: url('https://images.unsplash.com/photo-1549488344-93e1b7f2f170?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+    <h1>
+        HONG KONG
+        <br>
+        <span style="font-size: 0.6em; font-weight: 400; color: #555;">Premier Tourist Destinations</span>
+    </h1>
+</div>
+
+<section id="login">
+    <h2>Access Your Account 🔑</h2>
+    <div id="auth-container">
+
+        <form id="loginForm" class="animate">
+            <h3>Login</h3>
+            <label for="username">Username or Email:</label>
+            <input type="text" id="username" placeholder="Enter your username or email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="Enter your password" required>
+
+            <button type="submit">Secure Login</button>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.9em;">Don't have an account? 
+                <button type="button" id="showSignupBtn">Register Here</button>
+            </p>
+        </form>
+
+        <form id="signupForm" style="display: none;">
+            <h3>Create Account</h3>
+            
+            <div class="form-step active-step" id="signup-step1">
+                <label for="reg-email">Email Address:</label>
+                <input type="email" id="reg-email" placeholder="Enter your email" required>
+
+                <label for="reg-username">Choose Username:</label>
+                <input type="text" id="reg-username" placeholder="Choose a username" required>
+                
+                <button type="button" class="next-step-btn">Next Step &rarr;</button>
+            </div>
+
+            <div class="form-step" id="signup-step2">
+                <label for="reg-password">Password:</label>
+                <input type="password" id="reg-password" placeholder="Create a password" required>
+
+                <label for="reg-confirm-password">Confirm Password:</label>
+                <input type="password" id="reg-confirm-password" placeholder="Confirm your password" required>
+
+                <div class="button-group">
+                    <button type="button" class="prev-step-btn">&larr; Previous</button>
+                    <button type="submit">Create Account</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<section id="signout" style="display: none;">
+    <h2>Sign Out 🚪</h2>
+    <form id="signoutForm" class="animate">
+        <p style="text-align: center; margin-bottom: 20px; font-size: 1.1em;">You are currently logged in. Click the button below to end your session.</p>
+        <button type="submit">Confirm Sign Out</button>
+    </form>
+</section>
+---
+
+<section id="about" class="about">
+    <h2>About Hong Kong 🏙️</h2>
+    <img src="HONG TOWN.jpg" alt="Hong Kong Town" style="object-position: top center;">
+    <div class="content-wrapper">
+        <p>
+            Hong Kong is a dynamic, international hub, famously known as the world's most vertical city. Seamlessly blending British colonial heritage with deep Chinese cultural roots, it offers a truly unique experience. It comprises over 260 islands and a bustling mainland, hosting a global financial center and an unparalleled concentration of urban and natural wonders.
+        </p>
+        <p style="margin-top: 15px;">
+            Our mission is to provide curated access to the best of Hong Kong, from the gleaming skyscrapers of Central to the serene trails of Lantau Island. Explore the world-class culinary scene, the vibrant street markets of Kowloon, and the historic landmarks that define this 'Pearl of the Orient.'
+        </p>
+    </div>
+</section>
+
+---
+
+<section id="Places">
+    <h2>Explore Premier Destinations ✨</h2>
+
+   <div class="products-grid">
+        <div class="card" style="--delay: 1;">
+            <img src="Victoria Peak.jpg" alt="Victoria Peak">
+            <h3>Victoria Peak</h3>
+            <p>Ascend to the highest point on Hong Kong Island for unparalleled panoramic views of the entire city skyline, Victoria Harbour, and the surrounding islands. A mandatory visit for any traveler.</p>
+        </div>
+        <div class="card" style="--delay: 2;">
+            <img src="Disneyland Hong Kong.jpg" alt="Disneyland Hong Kong">
+            <h3>Hong Kong Disneyland 🏰</h3>
+            <p>Experience classic Disney magic fused with unique Asian cultural elements at this world-class theme park on Lantau Island, offering enchanting rides and captivating shows for all ages.</p>
+        </div>
+        <div class="card" style="--delay: 3;">
+            <img src="Temple Street Night Market.jpg" alt="Temple Street Night Market">
+            <h3>Temple Street Night Market</h3>
+            <p>Immerse yourself in the bustling, energetic heart of Kowloon. This iconic night market is famous for local street food, fortune tellers, opera singers, and an array of affordable goods.</p>
+        </div>
+        <div class="card" style="--delay: 4;">
+            <img src="Star Ferry.jpg" alt="Star Ferry">
+            <h3>Star Ferry</h3>
+            <p>A historic and highly economical mode of transport, the Star Ferry provides the most breathtaking cross-harbour views. Operating since 1888, it remains a symbol of the city's heritage.</p>
+        </div>
+        <div class="card" style="--delay: 5;">
+            <img src="Buddha.jpg" alt="Tian Tan Buddha">
+            <h3>Tian Tan Buddha (Big Buddha)</h3>
+            <p>Located on Ngong Ping, this monumental bronze statue is a powerful symbol of Buddhist culture. Accessible via a scenic cable car, it offers a peaceful contrast to the city's frenzy.</p>
+        </div>
+        <div class="card" style="--delay: 6;">
+            <img src="Ocean Park.jpg" alt="Ocean Park">
+            <h3>Ocean Park</h3>
+            <p>A leading marine-life and amusement park that seamlessly combines thrilling rides with significant educational exhibits, showcasing diverse wildlife and ocean conservation efforts.</p>
+        </div>
+    </div>
+</section>
+
+---
+
+<section id="Appointment">
+    <h2>Book Your Exclusive Tour 📅</h2>
+    <form id="appointmentForm" class="animate">
+        <div class="form-step active" id="step1">
+            <label for="appt-name">Full Name:</label>
+            <input type="text" id="appt-name" placeholder="Your Full Name" required>
+            <button type="button" class="next-btn">Next Step &rarr;</button>
+        </div>
+        <div class="form-step" id="step2">
+            <label for="appt-places">Desired Destinations / Tour Package:</label>
+           <select>
+                <option value=>Choose Place</option>
+                <option value="Victoria Peak"> Victoria Peak</option>
+                <option value="Disneyland Hong Kong"> Disneyland Hong Kong</option>
+                <option value="Temple Street Night Market"> Temple Street Night Market</option>
+                <option value="Star Ferry"> Star Ferry</option>
+                <option value="Tian Tan Buddha (Big Buddha)"> Tian Tan Buddha (Big Buddha)</option>
+                   <option value="Ocean Park"> Ocean Park</option> 
+            </select>
+
+            <div class="button-group"> 
+                <button type="button" class="prev-btn">&larr; Previous</button>
+                <button type="button" class="next-btn">Next Step &rarr;</button>
+            </div>
+        </div>
+        <div class="form-step" id="step3">
+            <label for="appt-schedule">Preferred Start Date:</label>
+            <input type="date" id="appt-schedule" required>
+            <div class="button-group">
+                <button type="button" class="prev-btn">&larr; Previous</button>
+                <button type="button" class="next-btn">Next Step &rarr;</button>
+            </div>
+        </div>
+        <div class="form-step" id="step4">
+            <label for="appt-contact">Phone Number (Optional but helpful):</label>
+            <input type="tel" id="appt-contact" placeholder="Enter Phone Number (e.g., +6392 469 5264)">
+            <div class="button-group">
+                <button type="button" class="prev-btn">&larr; Previous</button>
+                <button type="button" class="next-btn">Next Step &rarr;</button>
+            </div>
+        </div>
+        <div class="form-step" id="step5">
+            <label for="appt-email">Email Address:</label>
+            <input type="email" id="appt-email" placeholder="Enter a valid Email Address" required>
+            <div class="button-group">
+                <button type="button" class="prev-btn">&larr; Previous</button>
+                <button type="submit">Confirm & Submit Booking</button>
+            </div>
+        </div>
+    </form>
+</section>
+
+---
+
+<section id="contact">
+    <h2>Get in Touch 📧</h2>
+    <form id="contactForm" class="animate">
+        <label for="contact-email">Your Email Address:</label>
+        <input type="email" id="contact-email" placeholder="Your Email" required>
+
+        <label for="contact-message">Your Message / Inquiry:</label>
+        <textarea id="contact-message" rows="5" placeholder="Write your detailed inquiry here" required></textarea>
+
+        <button type="submit">Send Message</button>
+    </form>
+</section>
+
+<footer>
+    <h3>HONGKONG.COM</h3>
+    <p>Providing Premier Tourist Experiences | Follow us on social media</p>
+    <p>© 2025 HONGKONG Tourism Services. All Rights Reserved.</p>
+</footer>
+
+<script>
+  
+    let registeredAccounts = JSON.parse(localStorage.getItem('registeredAccounts')) || [];
+    let isLoggedIn = false;
+
+    const showMessage = (formId, message, isError = false) => {
+        const form = document.getElementById(formId);
+        if (!form) return;
+        
+        const existingMessage = form.querySelector('.submission-message');
+        if (existingMessage) existingMessage.remove();
+
+        const msgElement = document.createElement('p');
+        msgElement.classList.add('submission-message');
+        msgElement.classList.add(isError ? 'error' : 'success'); 
+        msgElement.textContent = message;
+        
+        form.appendChild(msgElement);
+       
+        if (formId !== 'signupForm' || formId === 'signupForm' && !isError) {
+             form.reset(); 
+        }
+        
+        if (formId !== 'signupForm' || isError) {
+            setTimeout(() => msgElement.remove(), 7000);
+        }
+    };
+    
+    const checkDuplicateAccount = (email, username) => {
+        const lowerEmail = email.toLowerCase();
+        const lowerUsername = username.toLowerCase();
+
+        const emailExists = registeredAccounts.some(account => account.email === lowerEmail);
+        const usernameExists = registeredAccounts.some(account => account.username === lowerUsername);
+
+        if (emailExists && usernameExists) {
+            return 'Error: Account creation failed. The email and username are already in use.';
+        } else if (emailExists) {
+            return 'Error: Account creation failed. An account with this email address already exists.';
+        } else if (usernameExists) {
+            return 'Error: Account creation failed. This username is already taken. Please choose another.';
+        }
+        return null;
+    };
+
+    const sections = document.querySelectorAll('section');
+    const forms = document.querySelectorAll('form');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    const observerOptions = { threshold: 0.1 };
+    
+    const scrollObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, observerOptions);
+
+    sections.forEach(section => scrollObserver.observe(section));
+    forms.forEach(form => scrollObserver.observe(form));
+    
+    const navObserver = new IntersectionObserver((entries) => {
+        let activeId = null;
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                
+                if (!activeId || entry.intersectionRatio > entries.find(e => e.target.id === activeId)?.intersectionRatio || entry.boundingClientRect.top < window.innerHeight / 2) {
+                    activeId = entry.target.id;
+                }
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+        
+            if (link.getAttribute('href').substring(1) === activeId && link.style.display !== 'none') {
+                link.classList.add('active');
+            }
+        });
+    }, { threshold: 0.5, rootMargin: "-50% 0px -49% 0px" });
+
+    sections.forEach(section => navObserver.observe(section));
+
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    const showSignupBtn = document.getElementById('showSignupBtn');
+    const loginLink = document.getElementById('login-link');
+    const signoutLink = document.getElementById('signout-link');
+    const loginSection = document.getElementById('login');
+    const signoutSection = document.getElementById('signout');
+    
+   
+    const handleAuthUI = (loggedIn) => {
+        if (loggedIn) {
+            loginSection.style.display = 'none';
+            loginLink.style.display = 'none';
+           
+            signoutSection.style.display = 'block';
+            signoutLink.style.display = 'inline-block';
+           
+            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+        } else {
+           
+            loginSection.style.display = 'block';
+            loginLink.style.display = 'inline-block';
+            signoutSection.style.display = 'none';
+            signoutLink.style.display = 'none';
+        }
+    }
+    
+
+    showSignupBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginForm.querySelector('.submission-message')?.remove(); 
+        signupForm.querySelector('.submission-message')?.remove();
+
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+        signupForm.classList.add('animate'); 
+        signupForm.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const identifier = document.getElementById('username').value.toLowerCase();
+        const password = document.getElementById('password').value;
+
+        
+        const user = registeredAccounts.find(
+            account => (account.email === identifier || account.username === identifier) && account.password === password
+        );
+
+        if (user) {
+            isLoggedIn = true;
+            localStorage.setItem('isLoggedIn', 'true');
+            console.log(`User ${user.username} logged in!`);
+            showMessage('loginForm', `Welcome back, ${user.username}! Login Successful! Redirecting...`, false);
+            
+           
+            setTimeout(() => {
+                 handleAuthUI(true); 
+            }, 1000);
+        } else {
+            showMessage('loginForm', 'Login Failed: Invalid username/email or password.', true);
+        }
+    });
+
+   
+    document.getElementById('signoutForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+       
+        isLoggedIn = false;
+        localStorage.removeItem('isLoggedIn');
+
+        showMessage('signoutForm', 'You have been successfully signed out. Returning to Login.', false);
+        
+       
+        setTimeout(() => {
+            handleAuthUI(false);
+           
+            document.getElementById('login').scrollIntoView({ behavior: 'smooth' });
+            signoutSection.querySelector('.submission-message')?.remove(); 
+        }, 1500);
+    });
+   
+
+
+    const signupSteps = document.querySelectorAll('#signupForm .form-step');
+    const nextStepBtns = document.querySelectorAll('#signupForm .next-step-btn');
+    const prevStepBtns = document.querySelectorAll('#signupForm .prev-step-btn');
+    let currentSignupStep = 0;
+
+    const navigateSignupStep = (direction) => {
+        const nextStep = currentSignupStep + direction;
+        if (nextStep >= 0 && nextStep < signupSteps.length) {
+            signupSteps[currentSignupStep].classList.remove('active-step');
+            currentSignupStep = nextStep;
+            signupSteps[currentSignupStep].classList.add('active-step');
+        }
+    };
+
+    nextStepBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const activeStep = signupSteps[currentSignupStep];
+            const inputs = activeStep.querySelectorAll('input[required]');
+            let allValid = true;
+
+            inputs.forEach(input => {
+                if (!input.value) {
+                    allValid = false;
+                    input.style.border = '2px solid var(--color-danger)'; 
+                } else {
+                    input.style.border = '1px solid #ced4da';
+                }
+            });
+
+            if (currentSignupStep === 0 && allValid) {
+                const email = document.getElementById('reg-email').value;
+                const username = document.getElementById('reg-username').value;
+                const duplicateCheck = checkDuplicateAccount(email, username);
+
+                if (duplicateCheck) {
+                    showMessage('signupForm', duplicateCheck, true);
+                    return; 
+                }
+            }
+            
+            if (allValid) {
+                navigateSignupStep(1);
+            } else {
+                alert('Please fill in all required fields.');
+            }
+        });
+    });
+
+    prevStepBtns.forEach(btn => btn.addEventListener('click', () => navigateSignupStep(-1)));
+
+    signupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const passwordInput = document.getElementById('reg-password');
+        const confirmPasswordInput = document.getElementById('reg-confirm-password');
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        
+        const email = document.getElementById('reg-email').value;
+        const username = document.getElementById('reg-username').value;
+
+        if (password !== confirmPassword) {
+            showMessage('signupForm', 'Error: Passwords do not match.', true);
+            confirmPasswordInput.style.border = '2px solid var(--color-danger)';
+            return;
+        }
+
+        const duplicateCheck = checkDuplicateAccount(email, username);
+        if (duplicateCheck) {
+            showMessage('signupForm', duplicateCheck, true);
+            return;
+        }
+        
+        
+        const newAccount = { 
+            email: email.toLowerCase(), 
+            username: username.toLowerCase(), 
+            password: password 
+        };
+
+        registeredAccounts.push(newAccount);
+        localStorage.setItem('registeredAccounts', JSON.stringify(registeredAccounts));
+        console.log('Registered Accounts:', registeredAccounts);
+        
+        showMessage('signupForm', 'Account Registration Complete! You can now log in.', false);
+        
+        signupForm.reset();
+        passwordInput.style.border = '1px solid #ced4da';
+        confirmPasswordInput.style.border = '1px solid #ced4da';
+        
+       
+        signupSteps[currentSignupStep].classList.remove('active-step');
+        currentSignupStep = 0;
+        signupSteps[currentSignupStep].classList.add('active-step');
+        
+       
+        setTimeout(() => {
+            signupForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            loginForm.classList.add('animate');
+            loginForm.scrollIntoView({ behavior: 'smooth' }); 
+           
+            signupForm.querySelector('.submission-message')?.remove(); 
+        }, 3000); 
+    });
+
+    const appointmentForm = document.getElementById('appointmentForm');
+    const appointmentSteps = document.querySelectorAll('#appointmentForm .form-step');
+    let currentAppointmentStep = 0;
+
+    const navigateAppointmentStep = (direction) => {
+        const activeStep = appointmentSteps[currentAppointmentStep];
+        const nextStep = currentAppointmentStep + direction;
+
+        
+        if (direction === 1) {
+             const inputs = activeStep.querySelectorAll('input[required], select[required]');
+             let allValid = true;
+             inputs.forEach(input => {
+                if (input.hasAttribute('required') && !input.value) {
+                    allValid = false;
+                    input.style.border = '2px solid var(--color-danger)';
+                } else {
+                    input.style.border = '1px solid #ced4da';
+                }
+            });
+
+            if (!allValid) {
+                alert('Please fill in the required field before proceeding.');
+                return; 
+            }
+        }
+        
+        if (nextStep >= 0 && nextStep < appointmentSteps.length) {
+            appointmentSteps[currentAppointmentStep].classList.remove('active');
+            currentAppointmentStep = nextStep;
+            appointmentSteps[currentAppointmentStep].classList.add('active');
+        }
+    };
+    
+    appointmentForm.querySelectorAll('.next-btn').forEach(btn => {
+        btn.addEventListener('click', () => navigateAppointmentStep(1));
+    });
+
+    appointmentForm.querySelectorAll('.prev-btn').forEach(btn => {
+        btn.addEventListener('click', () => navigateAppointmentStep(-1));
+    });
+
+    appointmentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        
+        const isUserLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+        if (!isUserLoggedIn) {
+            showMessage('appointmentForm', 'Booking Failed: You must be logged in to book a tour.', true);
+            return; 
+        }
+
+        const lastStepInputs = appointmentSteps[currentAppointmentStep].querySelectorAll('input[required]');
+        let allValid = true;
+        lastStepInputs.forEach(input => {
+            if (input.hasAttribute('required') && !input.value) {
+                allValid = false;
+                input.style.border = '2px solid var(--color-danger)';
+            } else {
+                input.style.border = '1px solid #ced4da';
+            }
+        });
+
+        if (allValid) {
+            showMessage('appointmentForm', 'Booking Confirmed! A representative will contact you shortly.', false);
+              
+            appointmentSteps[currentAppointmentStep].classList.remove('active');
+            currentAppointmentStep = 0;
+            appointmentSteps[currentAppointmentStep].classList.add('active');
+        } else {
+             alert('Please fill in the required field before submitting.');
+        }
+    });
+
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        showMessage('contactForm', 'Inquiry Sent! We will respond to your email within 24 hours.', false);
+    });
+
+    if (localStorage.getItem('isLoggedIn') === 'true') {
+        isLoggedIn = true;
+        
+        handleAuthUI(true);
+    } else {
+        
+        handleAuthUI(false);
+    }
+</script>
+
+</body>
+</html>
