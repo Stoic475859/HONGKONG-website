@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE ahtml>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -63,7 +63,7 @@
 
         .hero {
             height: 90vh;
-            background-image: url('hongkong_skyline.jpg'); 
+            background-image: url('https://images.unsplash.com/photo-1549488344-93e1b7f2f170?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); 
             background-size: cover;
             background-position: center;
             display: flex;
@@ -270,6 +270,38 @@
             background-color: #163a78; 
             transform: translateY(-1px);
         }
+        /* Style for the new Delete button */
+        .delete-btn {
+            background-color: var(--color-danger);
+            margin-top: 20px;
+        }
+        .delete-btn:hover {
+            background-color: #a71d2a; /* Darker red */
+            transform: translateY(-1px);
+        }
+
+        /* NEW STYLE FOR REMEMBER ME CHECKBOX */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin: 10px 0 20px 0; /* Add margin above the button */
+        }
+        .checkbox-container input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+            height: 16px; 
+            cursor: pointer;
+        }
+        .checkbox-container label {
+            display: inline;
+            margin: 0;
+            font-weight: 400;
+            cursor: pointer;
+            color: var(--color-dark);
+        }
+        /* END NEW STYLE */
+
+
         .next-btn, .prev-btn, .next-step-btn, .prev-step-btn {
             width: auto;
             margin: 10px 0 0;
@@ -331,6 +363,16 @@
             background: #ffe6e6; 
             border: 1px solid var(--color-danger);
         }
+        
+        /* Specific style for Resend button when disabled */
+        #resendOtpBtn:disabled {
+            background: none !important;
+            color: var(--color-gray) !important;
+            text-decoration: none !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+        }
+
 
         footer {
             background: var(--color-dark);
@@ -375,7 +417,7 @@
 <header>
     <a href="#login" class="nav-link" id="login-link">Login/Sign Up</a>
     <a href="#signout" class="nav-link" id="signout-link" style="display: none;">Sign Out</a>
-    <a href="#about" class="nav-link">About</a>
+    <a href="#delete-account" class="nav-link" id="delete-account-link" style="display: none;">Delete Account</a> <a href="#about" class="nav-link">About</a>
     <a href="#Places" class="nav-link">Destinations</a>
     <a href="#Appointment" class="nav-link">Book Tour</a>
     <a href="#contact" class="nav-link">Contact Us</a>
@@ -400,7 +442,11 @@
 
             <label for="password">Password:</label>
             <input type="password" id="password" placeholder="Enter your password" required>
-
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="rememberMe">
+                <label for="rememberMe">Remember me</label>
+            </div>
             <button type="submit">Secure Login</button>
             <p style="text-align: center; margin-top: 15px; font-size: 0.9em;">Don't have an account? 
                 <button type="button" id="showSignupBtn">Register Here</button>
@@ -421,6 +467,24 @@
             </div>
 
             <div class="form-step" id="signup-step2">
+                <p style="margin-bottom: 20px; font-size: 0.95em; color: var(--color-gray);">
+                    A One-Time Password (OTP) is being sent to <span id="otp-email-display" style="font-weight: 500; color: var(--color-dark);"></span>. Please check your inbox.
+                </p>
+
+                <label for="reg-otp">Enter OTP:</label>
+                <input type="text" id="reg-otp" placeholder="Enter 6-digit OTP" required maxlength="6" pattern="\d{6}">
+
+                <p style="margin-top: 15px; text-align: right;">
+                    <button type="button" id="resendOtpBtn" style="background: none; color: var(--color-secondary); text-decoration: underline; padding: 0; width: auto; font-size: 0.9em;">Resend OTP</button>
+                </p>
+
+                <div class="button-group">
+                    <button type="button" class="prev-step-btn">&larr; Previous</button>
+                    <button type="button" class="next-step-btn" id="verifyOtpBtn">Verify OTP &rarr;</button>
+                </div>
+            </div>
+
+            <div class="form-step" id="signup-step3">
                 <label for="reg-password">Password:</label>
                 <input type="password" id="reg-password" placeholder="Create a password" required>
 
@@ -441,6 +505,23 @@
     <form id="signoutForm" class="animate">
         <p style="text-align: center; margin-bottom: 20px; font-size: 1.1em;">You are currently logged in. Click the button below to end your session.</p>
         <button type="submit">Confirm Sign Out</button>
+    </form>
+</section>
+
+<section id="delete-account" style="display: none;">
+    <h2>Delete Account ⚠️</h2>
+    <form id="deleteAccountForm" class="animate">
+        <p style="text-align: center; margin-bottom: 25px; font-size: 1.1em; color: var(--color-danger);">
+            <strong>WARNING:</strong> This action is permanent and cannot be undone. All user data associated with your account will be lost.
+        </p>
+
+        <label for="delete-password">Confirm Password to Delete:</label>
+        <input type="password" id="delete-password" placeholder="Enter your current password" required>
+
+        <button type="submit" class="delete-btn">Permanently Delete Account</button>
+        <p style="text-align: center; margin-top: 15px; font-size: 0.9em;">
+            <button type="button" id="cancelDeleteBtn" style="background: none; color: var(--color-gray); text-decoration: none; width: auto; padding: 0;">Cancel and Go Back</button>
+        </p>
     </form>
 </section>
 ---
@@ -575,7 +656,16 @@
 <script>
   
     let registeredAccounts = JSON.parse(localStorage.getItem('registeredAccounts')) || [];
-    let isLoggedIn = false;
+    // Stores the identifier (email/username) of the currently logged-in user
+    let loggedInUserIdentifier = localStorage.getItem('loggedInUserIdentifier') || null; 
+    let isLoggedIn = !!loggedInUserIdentifier; // Update isLoggedIn based on identifier
+    
+    // Global variables for OTP
+    let generatedOTP = null; 
+    const OTP_LENGTH = 6;
+    const RESEND_DELAY_MS = 30000; // 30 seconds
+    let resendTimer = null; 
+
 
     const showMessage = (formId, message, isError = false) => {
         const form = document.getElementById(formId);
@@ -587,15 +677,14 @@
         const msgElement = document.createElement('p');
         msgElement.classList.add('submission-message');
         msgElement.classList.add(isError ? 'error' : 'success'); 
-        msgElement.textContent = message;
+        msgElement.innerHTML = message; 
         
         form.appendChild(msgElement);
        
-        if (formId !== 'signupForm' || formId === 'signupForm' && !isError) {
-             form.reset(); 
-        }
-        
-        if (formId !== 'signupForm' || isError) {
+        if (formId === 'loginForm' || formId === 'signoutForm' || formId === 'contactForm' || formId === 'deleteAccountForm') {
+            if (!isError) form.reset(); // Only reset non-error forms for better UX
+            setTimeout(() => msgElement.remove(), 7000);
+        } else if (isError) {
             setTimeout(() => msgElement.remove(), 7000);
         }
     };
@@ -616,7 +705,72 @@
         }
         return null;
     };
+    
+    // --- OTP FUNCTIONS ---
 
+    // Function to generate a simulated 6-digit OTP (This would be done by the server for security)
+    const generateOtp = () => {
+        return Math.floor(100000 + Math.random() * 900000).toString(); 
+    };
+
+    // Function to handle the OTP resend timer
+    const startResendTimer = () => {
+        const resendBtn = document.getElementById('resendOtpBtn');
+        let timeLeft = RESEND_DELAY_MS / 1000;
+
+        resendBtn.disabled = true;
+        resendBtn.style.cursor = 'not-allowed';
+        resendBtn.textContent = `Resend in ${timeLeft}s`;
+
+        if (resendTimer) clearInterval(resendTimer);
+
+        resendTimer = setInterval(() => {
+            timeLeft--;
+            resendBtn.textContent = `Resend in ${timeLeft}s`;
+
+            if (timeLeft <= 0) {
+                clearInterval(resendTimer);
+                resendBtn.disabled = false;
+                resendBtn.style.cursor = 'pointer';
+                resendBtn.textContent = 'Resend OTP';
+            }
+        }, 1000);
+    };
+
+    // Function to send the OTP (Simulating a real backend request using fetch)
+    const sendOtp = async (email) => {
+        document.getElementById('otp-email-display').textContent = email;
+        showMessage('signupForm', `Sending OTP to ${email}. Please wait...`, false);
+        
+        const resendBtn = document.getElementById('resendOtpBtn');
+        resendBtn.disabled = true;
+
+        // **In a real application, this is where the request to the server happens.**
+        // The server would generate and send the OTP via email/SMS.
+        try {
+            // Simulate server request delay
+            const data = await new Promise(resolve => setTimeout(() => resolve({ success: true, otp: generateOtp() }), 1500)); 
+            
+            if (data.success) {
+                // We store the SIMULATED OTP here for client-side verification.
+                generatedOTP = data.otp; 
+
+                showMessage('signupForm', `Real-world OTP Request Sent to <strong>${email}</strong>. Check your inbox. (Simulated OTP: ${generatedOTP})`, false);
+                startResendTimer();
+            } else {
+                 showMessage('signupForm', 'Error: Could not send OTP. Please try again.', true);
+                 resendBtn.disabled = false;
+            }
+
+        } catch (error) {
+            console.error('OTP Send Error:', error);
+            showMessage('signupForm', 'Network Error: Failed to connect to OTP service.', true);
+            resendBtn.disabled = false;
+        }
+    };
+    
+    // --- AUTH UI and UTILITY FUNCTIONS ---
+    
     const sections = document.querySelectorAll('section');
     const forms = document.querySelectorAll('form');
     const navLinks = document.querySelectorAll('.nav-link');
@@ -661,18 +815,27 @@
     const showSignupBtn = document.getElementById('showSignupBtn');
     const loginLink = document.getElementById('login-link');
     const signoutLink = document.getElementById('signout-link');
+    const deleteAccountLink = document.getElementById('delete-account-link'); 
     const loginSection = document.getElementById('login');
     const signoutSection = document.getElementById('signout');
+    const deleteAccountSection = document.getElementById('delete-account'); 
     
    
     const handleAuthUI = (loggedIn) => {
+        isLoggedIn = loggedIn;
         if (loggedIn) {
             loginSection.style.display = 'none';
             loginLink.style.display = 'none';
            
             signoutSection.style.display = 'block';
             signoutLink.style.display = 'inline-block';
-           
+            deleteAccountLink.style.display = 'inline-block'; 
+            
+            // Hide delete section initially if not navigated to
+            if (!window.location.hash.includes('delete-account')) {
+                 deleteAccountSection.style.display = 'none';
+            }
+            
             document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
         } else {
            
@@ -680,14 +843,23 @@
             loginLink.style.display = 'inline-block';
             signoutSection.style.display = 'none';
             signoutLink.style.display = 'none';
+            deleteAccountSection.style.display = 'none'; 
+            deleteAccountLink.style.display = 'none'; 
         }
     }
     
+    // --- AUTH FORM LISTENERS ---
 
     showSignupBtn.addEventListener('click', (e) => {
         e.preventDefault();
         loginForm.querySelector('.submission-message')?.remove(); 
         signupForm.querySelector('.submission-message')?.remove();
+        
+        // Reset signup step to 1 and make it active
+        signupSteps.forEach(step => step.classList.remove('active-step'));
+        currentSignupStep = 0;
+        signupSteps[currentSignupStep].classList.add('active-step');
+
 
         loginForm.style.display = 'none';
         signupForm.style.display = 'block';
@@ -700,6 +872,7 @@
         
         const identifier = document.getElementById('username').value.toLowerCase();
         const password = document.getElementById('password').value;
+        const rememberMe = document.getElementById('rememberMe').checked; // NEW: Get Remember me state
 
         
         const user = registeredAccounts.find(
@@ -707,10 +880,18 @@
         );
 
         if (user) {
-            isLoggedIn = true;
-            localStorage.setItem('isLoggedIn', 'true');
+            loggedInUserIdentifier = user.email; // Use email as persistent identifier
+            
+            // NEW: Conditional storage based on "Remember me"
+            if (rememberMe) {
+                localStorage.setItem('loggedInUserIdentifier', loggedInUserIdentifier);
+            } else {
+                // Do not remember for next session if unchecked
+                localStorage.removeItem('loggedInUserIdentifier'); 
+            }
+
             console.log(`User ${user.username} logged in!`);
-            showMessage('loginForm', `Welcome back, ${user.username}! Login Successful! Redirecting...`, false);
+            showMessage('loginForm', `Welcome back, <strong>${user.username}</strong>! Login Successful! Redirecting...`, false);
             
            
             setTimeout(() => {
@@ -726,8 +907,8 @@
         e.preventDefault();
 
        
-        isLoggedIn = false;
-        localStorage.removeItem('isLoggedIn');
+        loggedInUserIdentifier = null;
+        localStorage.removeItem('loggedInUserIdentifier');
 
         showMessage('signoutForm', 'You have been successfully signed out. Returning to Login.', false);
         
@@ -739,8 +920,58 @@
             signoutSection.querySelector('.submission-message')?.remove(); 
         }, 1500);
     });
-   
 
+    // --- DELETE ACCOUNT LISTENERS ---
+    deleteAccountLink.addEventListener('click', () => {
+         // Ensure signout form is hidden when navigating to delete
+         signoutSection.style.display = 'none';
+         deleteAccountSection.style.display = 'block';
+    });
+
+    document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+        // Clear form and navigate back to signout section
+        document.getElementById('deleteAccountForm').reset();
+        deleteAccountSection.style.display = 'none';
+        signoutSection.style.display = 'block';
+        signoutSection.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('deleteAccountForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (!loggedInUserIdentifier) {
+            showMessage('deleteAccountForm', 'Error: Not currently logged in. Please log in first.', true);
+            return;
+        }
+
+        const passwordAttempt = document.getElementById('delete-password').value;
+        const accountIndex = registeredAccounts.findIndex(
+            account => account.email === loggedInUserIdentifier && account.password === passwordAttempt
+        );
+
+        if (accountIndex !== -1) {
+            // Found and password matched: delete the account
+            registeredAccounts.splice(accountIndex, 1);
+            localStorage.setItem('registeredAccounts', JSON.stringify(registeredAccounts));
+
+            // Log out the user
+            loggedInUserIdentifier = null;
+            localStorage.removeItem('loggedInUserIdentifier');
+
+            showMessage('deleteAccountForm', 'Account permanently deleted. Thank you for your time.', false);
+            
+            // Redirect to login after a delay
+            setTimeout(() => {
+                handleAuthUI(false);
+                document.getElementById('login').scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+            
+        } else {
+            showMessage('deleteAccountForm', 'Error: Password confirmation failed. Account deletion aborted.', true);
+        }
+    });
+    // --- END DELETE ACCOUNT LISTENERS ---
+   
 
     const signupSteps = document.querySelectorAll('#signupForm .form-step');
     const nextStepBtns = document.querySelectorAll('#signupForm .next-step-btn');
@@ -771,7 +1002,13 @@
                 }
             });
 
-            if (currentSignupStep === 0 && allValid) {
+            if (!allValid) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            // --- STEP 1 VALIDATION (Email/Username check) ---
+            if (currentSignupStep === 0) {
                 const email = document.getElementById('reg-email').value;
                 const username = document.getElementById('reg-username').value;
                 const duplicateCheck = checkDuplicateAccount(email, username);
@@ -780,17 +1017,48 @@
                     showMessage('signupForm', duplicateCheck, true);
                     return; 
                 }
+                
+                // If valid and unique, send OTP (simulated backend call) and move to next step
+                sendOtp(email);
+                navigateSignupStep(1);
+                return;
             }
             
-            if (allValid) {
-                navigateSignupStep(1);
-            } else {
-                alert('Please fill in all required fields.');
+            // --- STEP 2 VALIDATION (OTP Verification) ---
+            if (currentSignupStep === 1) {
+                const userOtp = document.getElementById('reg-otp').value;
+                if (userOtp === generatedOTP) {
+                    // Stop timer and move to next step
+                    if (resendTimer) clearInterval(resendTimer);
+                    showMessage('signupForm', 'OTP Verified! Proceeding to password creation.', false);
+                    navigateSignupStep(1);
+                } else {
+                    showMessage('signupForm', 'Error: Invalid OTP. Please try again.', true);
+                    document.getElementById('reg-otp').style.border = '2px solid var(--color-danger)';
+                }
+                return; 
             }
+
+            // Default navigation (Shouldn't be needed after step 2)
+            navigateSignupStep(1);
         });
     });
 
-    prevStepBtns.forEach(btn => btn.addEventListener('click', () => navigateSignupStep(-1)));
+    prevStepBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (currentSignupStep === 1) {
+                // If moving back from OTP step, clear timer
+                if (resendTimer) clearInterval(resendTimer);
+            }
+            navigateSignupStep(-1);
+        });
+    });
+
+    // --- OTP Resend Button Listener ---
+    document.getElementById('resendOtpBtn').addEventListener('click', () => {
+        const email = document.getElementById('reg-email').value;
+        sendOtp(email);
+    });
 
     signupForm.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -833,7 +1101,8 @@
         confirmPasswordInput.style.border = '1px solid #ced4da';
         
        
-        signupSteps[currentSignupStep].classList.remove('active-step');
+        // Reset to Step 1 (index 0)
+        signupSteps[2].classList.remove('active-step'); 
         currentSignupStep = 0;
         signupSteps[currentSignupStep].classList.add('active-step');
         
@@ -894,7 +1163,7 @@
         e.preventDefault();
         
         
-        const isUserLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const isUserLoggedIn = !!localStorage.getItem('loggedInUserIdentifier');
 
         if (!isUserLoggedIn) {
             showMessage('appointmentForm', 'Booking Failed: You must be logged in to book a tour.', true);
@@ -928,14 +1197,8 @@
         showMessage('contactForm', 'Inquiry Sent! We will respond to your email within 24 hours.', false);
     });
 
-    if (localStorage.getItem('isLoggedIn') === 'true') {
-        isLoggedIn = true;
-        
-        handleAuthUI(true);
-    } else {
-        
-        handleAuthUI(false);
-    }
+    
+    handleAuthUI(!!localStorage.getItem('loggedInUserIdentifier'));
 </script>
 
 </body>
